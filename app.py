@@ -173,7 +173,6 @@ fig.update_layout(
     scene=dict(aspectmode="data",
                xaxis_title="x (m)", yaxis_title="y (m)", zaxis_title="z (m)")
 )
-st.plotly_chart(fig, use_container_width=True)
 fig.update_layout(
     paper_bgcolor="#0e1117",    # whole page behind the scene
     plot_bgcolor="#0e1117",     # border around the 3‑D box
@@ -185,6 +184,8 @@ fig.update_layout(
     ),
     font_color="#f5f5f5"        # light text so tick labels stay readable
 )
+st.plotly_chart(fig, use_container_width=True)
+
 
 # skipped info
 if skips:
