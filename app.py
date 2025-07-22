@@ -5,6 +5,39 @@
 • Resolution safety guard  + PNG export
 """
 
+###############################################################################
+# ░░░  EMERGENCY PATCH  ░░░  (for Streamlit Cloud 2025 broken env)  ░░░
+# Installs Plotly (and anything else you list) into a local folder that
+# *is* writable, then appends that folder to sys.path.  No sudo, no venv.
+###############################################################################
+import importlib, subprocess, sys, os, site
+
+LOCAL_DEPS = os.path.join(os.path.dirname(__file__), "_localdeps")
+os.makedirs(LOCAL_DEPS, exist_ok=True)
+sys.path.append(LOCAL_DEPS)           # make imports see the folder
+
+def ensure(pkg, version=""):
+    """
+    Import *pkg*; if it fails, pip‑install it into LOCAL_DEPS.
+    Optionally pin a version:  ensure("plotly", "5.12.0")
+    """
+    try:
+        importlib.import_module(pkg)
+    except ModuleNotFoundError:
+        spec = f"{pkg}=={version}" if version else pkg
+        print(f"🔧  Installing missing package: {spec}")
+        subprocess.check_call(
+            [sys.executable, "-m", "pip", "install", "--no-cache-dir",
+             "--target", LOCAL_DEPS, spec]
+        )
+        site.addsitedir(LOCAL_DEPS)   # refresh import paths
+
+# 👉 list every package Streamlit Cloud keeps “losing”
+ensure("plotly", "6.2.0")
+ensure("psutil", "5.9.8")
+###############################################################################
+
+
 import streamlit as st, numpy as np, plotly.graph_objects as go, psutil, os
 
 try:
