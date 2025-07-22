@@ -174,6 +174,17 @@ fig.update_layout(
                xaxis_title="x (m)", yaxis_title="y (m)", zaxis_title="z (m)")
 )
 st.plotly_chart(fig, use_container_width=True)
+fig.update_layout(
+    paper_bgcolor="#0e1117",    # whole page behind the scene
+    plot_bgcolor="#0e1117",     # border around the 3‑D box
+    scene=dict(
+        bgcolor="#0e1117",      # inside the 3‑D box
+        xaxis=dict(backgroundcolor="#0e1117", gridcolor="#222", zerolinecolor="#444"),
+        yaxis=dict(backgroundcolor="#0e1117", gridcolor="#222", zerolinecolor="#444"),
+        zaxis=dict(backgroundcolor="#0e1117", gridcolor="#222", zerolinecolor="#444"),
+    ),
+    font_color="#f5f5f5"        # light text so tick labels stay readable
+)
 
 # skipped info
 if skips:
