@@ -56,6 +56,11 @@ Lz = st.number_input("Height (Lz)", 1.0, 50.0, 3.0, step=0.1)
 c          = 343.0
 EPS        = 1e-8
 
+A_total = 2 * (Lx * Ly + Lx * Lz + Ly * Lz)
+V = Lx * Ly * Lz
+RT60 = 0.161 * V / (A_total * alpha + EPS)
+
+
 # ── helpers ──
 def mem_ok(voxels: int, bytes_per_voxel: int = 16) -> bool:
     """Rough check: block if >25 % of available RAM."""
