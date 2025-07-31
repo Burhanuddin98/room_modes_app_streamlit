@@ -70,32 +70,83 @@ def sine_vectors(res: int):
 st.set_page_config("3‑D Room Acoustic Simulator", layout="wide")
 st.title("🎧 3‑D Room Acoustic Simulator — Green’s Function")
 
+
+
 with st.sidebar:
     st.header("🔧 Modal limits")
-    nx_max = st.slider("nx max", 1, 10, 5)
-    ny_max = st.slider("ny max", 1, 10, 5)
-    nz_max = st.slider("nz max", 1, 10, 5)
-    mode_filter = st.selectbox("Modes to include",
-                               ("All", "Axial", "Tangential", "Oblique"))
+
+    col1, col2 = st.columns([3, 1])
+    with col1:
+        nx_slider = st.slider("nx max", 1, 10, 5, key="nx_slider")
+    with col2:
+        nx_max = st.number_input(" ", 1, 10, nx_slider, step=1, key="nx_input")
+
+    col1, col2 = st.columns([3, 1])
+    with col1:
+        ny_slider = st.slider("ny max", 1, 10, 5, key="ny_slider")
+    with col2:
+        ny_max = st.number_input(" ", 1, 10, ny_slider, step=1, key="ny_input")
+
+    col1, col2 = st.columns([3, 1])
+    with col1:
+        nz_slider = st.slider("nz max", 1, 10, 5, key="nz_slider")
+    with col2:
+        nz_max = st.number_input(" ", 1, 10, nz_slider, step=1, key="nz_input")
+
+    mode_filter = st.selectbox("Modes to include", ("All", "Axial", "Tangential", "Oblique"))
 
     st.header("🎚 Acoustics")
-    freq    = st.slider("Frequency (Hz)", 20, 500, 100)
-    ζ       = st.slider("Damping  ζ  (fraction of critical)",
-                        0.0, 0.05, 0.01, step=0.005,
-                        help="0 = loss‑free, 0.05 ≈ 5 % critical damping")
+
+    col1, col2 = st.columns([3, 1])
+    with col1:
+        freq_slider = st.slider("Frequency (Hz)", 20, 500, 100, key="freq_slider")
+    with col2:
+        freq = st.number_input(" ", 20, 500, freq_slider, step=5, key="freq_input")
+
+    col1, col2 = st.columns([3, 1])
+    with col1:
+        zeta_slider = st.slider("Damping  ζ  (fraction of critical)",
+                                0.0, 0.05, 0.01, step=0.005,
+                                help="0 = loss‑free, 0.05 ≈ 5 % critical damping",
+                                key="zeta_slider")
+    with col2:
+        ζ = st.number_input(" ", 0.0, 0.05, zeta_slider, step=0.005, format="%.3f", key="zeta_input")
+
     animate = st.checkbox("Animate in time")
     if animate:
         t_ms = st.slider("Time (ms)", 0, 1000, 0, 10)
         time = t_ms / 1000
 
     st.header("🖼 Render / Export")
-    res = st.slider("Grid resolution", 24, 96, 32, step=8)
+
+    col1, col2 = st.columns([3, 1])
+    with col1:
+        res_slider = st.slider("Grid resolution", 24, 96, 32, step=8, key="res_slider")
+    with col2:
+        res = st.number_input(" ", 24, 96, res_slider, step=8, key="res_input")
+
     highres = st.button("Export PNG at 128³")
 
     st.header("📍 Source")
-    sx = st.slider("x (m)", 0.0, Lx, Lx/2)
-    sy = st.slider("y (m)", 0.0, Ly, Ly/2)
-    sz = st.slider("z (m)", 0.0, Lz, Lz/2)
+
+    col1, col2 = st.columns([3, 1])
+    with col1:
+        sx_slider = st.slider("x (m)", 0.0, Lx, Lx/2, key="sx_slider")
+    with col2:
+        sx = st.number_input(" ", 0.0, Lx, sx_slider, step=0.1, key="sx_input")
+
+    col1, col2 = st.columns([3, 1])
+    with col1:
+        sy_slider = st.slider("y (m)", 0.0, Ly, Ly/2, key="sy_slider")
+    with col2:
+        sy = st.number_input(" ", 0.0, Ly, sy_slider, step=0.1, key="sy_input")
+
+    col1, col2 = st.columns([3, 1])
+    with col1:
+        sz_slider = st.slider("z (m)", 0.0, Lz, Lz/2, key="sz_slider")
+    with col2:
+        sz = st.number_input(" ", 0.0, Lz, sz_slider, step=0.1, key="sz_input")
+
 
 # ── sanity‑check memory ──
 voxels = res**3
