@@ -99,6 +99,10 @@ with st.sidebar:
     mode_filter = st.selectbox("Modes to include", ("All", "Axial", "Tangential", "Oblique"))
 
     st.header("🎚 Acoustics")
+    st.header("🌐 Hybrid Model Settings")
+
+    f_crossover = st.slider("Crossover frequency (Hz)", 100, 3000, 800, step=50)
+    alpha = st.slider("Avg. wall absorption α", 0.01, 1.0, 0.2, step=0.01)
 
     col1, col2 = st.columns([3, 1])
     with col1:
