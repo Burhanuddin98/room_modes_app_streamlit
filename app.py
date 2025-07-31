@@ -84,9 +84,9 @@ with st.sidebar:
     st.header("🌐 Hybrid Model")
     col1, col2 = st.columns([3, 1])
     with col1:
-        fco_slider = st.slider("Crossover Frequency (Hz)", 100, 3000, 800, step=50, key="fco_slider")
+        fco_slider = st.slider("Crossover Frequency (Hz)", 100, 4000, 800, step=50, key="fco_slider")
     with col2:
-        f_crossover = st.number_input(" ", 100, 10000, fco_slider, step=50, key="fco_input")
+        f_crossover = st.number_input(" ", 100, 4000, fco_slider, step=50, key="fco_input")
 
     col1, col2 = st.columns([3, 1])
     with col1:
