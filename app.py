@@ -170,6 +170,57 @@ if not mem_ok(voxels):
 xv, yv, zv = sine_vectors(res)
 Xc, Yc, Zc = np.meshgrid(xv, yv, zv, indexing="ij")   # for Plotly
 
+ω = 2 * np.pi * freq
+modal_applicable = freq <= f_crossover
+skips = []
+
+if modal_applicable:
+    G = np.zeros_like(Xc, dtype=np.complex128)
+    with st.spinner("Summing modes …"):
+        for nx in range(0, nx_max + 1):
+            for ny in range(0, ny_max + 1):
+                for nz in range(0, nz_max + 1):
+
+                    if nx == ny == nz == 0:
+                        continue
+
+                    nz_cnt = (nx > 0) + (ny > 0) + (nz > 0)
+                    if mode_filter == "Axial" and nz_cnt != 1: continue
+                    if mode_filter == "Tangential" and nz_cnt != 2: continue
+                    if mode_filter == "Oblique" and nz_cnt != 3: continue
+
+                    kx, ky, kz = np.pi * nx / Lx, np.pi * ny / Ly, np.pi * nz / Lz
+                    ωn = c * np.sqrt(kx**2 + ky**2 + kz**2)
+
+                    φx = np.sin(kx * xv)[:, None, None]
+                    φy = np.sin(ky * yv)[None, :, None]
+                    φz = np.sin(kz * zv)[None, None, :]
+                    φr = φx * φy * φz
+                    φrp = np.sin(kx * sx) * np.sin(ky * sy) * np.sin(kz * sz)
+
+                    if abs(φrp) < EPS:
+                        skips.append((nx, ny, nz)); continue
+
+                    crit = 2 * ωn
+                    denom = (ωn**2 - ω**2) + 1j * ζ * crit * ω
+                    denom = denom if abs(denom) > EPS else EPS
+
+                    G += (φr * φrp) / denom
+
+    if animate:
+        P = np.real(G * np.exp(1j * ω * time))
+        bar_lbl = "Re(p)"
+    else:
+        P = np.abs(G)
+        bar_lbl = "|p|"
+else:
+    if animate:
+        E_t = np.exp(-6.91 * time / RT60)
+    else:
+        E_t = 1.0
+    P = np.ones_like(Xc) * E_t
+    bar_lbl = "RT60 Field"
+
 
 # normalise 0‑1   (NumPy‑2‑safe)
 rng = np.ptp(P)
