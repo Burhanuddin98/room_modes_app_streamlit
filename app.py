@@ -49,7 +49,10 @@ except ModuleNotFoundError as e:
 
 
 # ── constants ──
-Lx, Ly, Lz = 5.0, 4.0, 3.0
+st.header("📐 Room Dimensions (m)")
+Lx = st.number_input("Length (Lx)", 1.0, 50.0, 5.0, step=0.1)
+Ly = st.number_input("Width (Ly)", 1.0, 50.0, 4.0, step=0.1)
+Lz = st.number_input("Height (Lz)", 1.0, 50.0, 3.0, step=0.1)
 c          = 343.0
 EPS        = 1e-8
 
